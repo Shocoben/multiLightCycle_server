@@ -1,0 +1,108 @@
+!!! 5
+html
+	head
+		title Isart Game
+		link(type="text/css", rel="stylesheet", href="/css/main.css")
+	body
+		#wrapper
+			#header 
+				h1 Multi Ligth Cycle
+			#body
+				#presentation
+					h2 Details technique  
+				#technique
+					h1 Il y a 3 grands folders :
+					h2 Public / Script : pour les fichiers du client
+					h2 Public / Server_and_client : pour les fichiers utilisé à la fois par le client et le server
+					h2 ./ : la racine du fichier est utilisé afin d'y mettre tous les fichiers du server
+					h1 Client et serveur :
+					h2 Les joueurs (player.js).
+					h3 Les joueurs sont dessinés dans la partie client et le serveur s'occupe de la logique (les animer, leurs faire perdre des points...).
+					h3 Ils possèdent chacun des murs, des coordonées, et une fonction move. 
+					h2 Les murs (wall.js)
+					h3 Chaque joueur possède ses murs, si le joueur perd, ceux-ci sont réinitialisés.
+					h3 Dans la partie client, ceux-ci sont dessiné sous la forme de ligne. On la dessine aussi de manière glow en faisant plusieurs ligne, en varient l'alpha et en ajoutant parfois du blanc. 
+					h3 Ceux-ci sont constitué de coordonnées de départ (initX et initY), et de coordonées finales (x et y).
+					h3 Ils possèdent chacun une fonction move qui modifient leurs coordonées mais par leurs coordonées de départt. Ils ont également une fonction getSurface, qui permet de récupérer leur surface (x,y,width,height).
+					h2 La collisionAABB 
+					h3 Fonction permettant de dire si il y a une collision de type AABB entre 2 joueurs.
+					h2 La spawnZone 
+					h3 Contient les coordonnées de la zone de départ.
+					h3 Zone de départ des joueurs, si un joueur meurt celui-ci redémarre dans cet zone.
+					h3 Elle est dessiné du coté client et le reset du joueur se passe du coté serveur.
+					h3 Tant que le joueur n'a pas quité la zone, il ne peut pas dessiner de murs.
+					h2 canvasParams
+					h3 Défini les paramètres du canvas afin de l'utiliser du coté client et serveur.
+					h1 Client 
+					h2 EventBus
+					h3 EventBus instancie un objet permettant de fait de l'évènementiel grace à AddEventCapabilities.
+					h2 Connector
+					h3 Instancie un objet qui se connecte à une IP et vous permet de communiquer avec le serveur grace à socket.io.
+					h2 Gameloop
+					h3 Utilise addUpdateCapabilities() afin de lui ajouter un update;
+					h3 Instancie un objet qui permet d'ajouter des objets en fonction de contexts, et à chaque frame, la fonction update() de chaque objet inscrit dans le context actuel de gameLoop est appelée.
+					h3 Afin d'ajouter un objet à un contexte, on utilise addUpdate(context, o);
+					h3 Il est également possible de supprimer un objet de la liste d'un context, ou tout le contexte entier avec deleteUpdate(context, o.gameLoopId) (On doit utiliser son ID de gameloop qui avait été automatiquement instancé lors de son ajout à la liste).
+					h3 Pour changer le context actuel on utilise .changeCurrentCtx(ctx) , il est possible d'associer cet fonction à l'eventBus grace à associateChangeCtxWithEventBus(eventBus) qu'on apelle avec eventBusEmit("changeUpdateCtx",ctx);
+					h3 Cela permet par exemple de changer du ctx "game" au ctx "pause", ce qui mettra votre jeu en pause et affichera un menu pause.
+					h3 Pour finir, on lance le tout avec gameLoop.init() afin de lancer l'update.
+					h2 main.js
+					h3 2 objets sont instanciés dans le main.js qui seront utilisé à travers les objets, il sagit de eventBus (pour l'evenementiel) et socket (pour socket.io)
+					h3 On y prépare d'abord la gameloop en ajoutant game au context "game", puis on initialise game avec game.init et le chat, qu'on connecte ensuite au socket.
+					h2 game
+					h3 Initialisation :
+					h3 Dans son initialisation il regarde si on lui a bien passé un eventBus et un socket et se les approprie.
+					h3 Pour eventBus, il change son context actuel en game afin d'avoir son update actif.
+					h3 Pour socket, il attend que le serveur lui envoie "startGame" et lui dit qu'il est pret (Pour etre sur que les 2 sont synchronisés).
+					h3 Il active (initialise) également Highscore, qui s'affichera si on appuie sur Tab , il disparaitra avec la même touche.
+					h2 StartGame :
+					h3 Une fois que le serveur lui a répondu, game connecte le highscore avec socket et s'occupe ensuite d'initialiser le joueur actuel avec createOwnPlayer.
+					h3 CreateOwnPlayer:
+					h3 Game y crée son propre joueur, lui ajoute les options de controles, demande le pseudonyme du joueur et envoi "playerCreated" avec le pseudo au serveur.
+					h2 Update et rendu : 
+					h3 Utilise son update afin d'appeler render, qui s'occupe de dessiner tous les éléments du jeux (joueurs, murs, spawnZone, les textes).
+					h3 Afin de palier au lag, il fait également bouger lui aussi les joueurs et les murs afin d'avoir une prévision.
+					h3 Player (player_client)
+					h2 rendu
+					h3 Dans la partie client il s'agit surtout des fonctions permettant de les dessiner via le prototype.
+					h2 addControls
+					h3 Ajoute des controles unilatérales à un objet avec addKeyListenersCapabilities.
+					h3 Il vérifie que la nouvelle touche est différent de celle appuiée précédement, afin d'éviter le spam .
+					h3 Celui-ci prend en paramète un socket, et si celui-est fourni s'occupera d'envoier la nouvelle orientation du joueur au serveur afin de créer un nouveau mur. 
+					h2 Wall (wall_client)
+					h3 Les murs du coté client ne possèdent que des fonctions de dessin appellées via leur prototype ceux-ci sont dessinés sous forme de ligne.
+					h2 Popup
+					h3 Crée une div qui sera créé dans un objet et aligné en son milieu. Il peut prendre le paramètre centerTo , qui remplacera alors le parent pour le centrage (très utilise pour le canvas).
+					h2 Highscore
+					h3 Crée une popup au milieu du canvas, et la cache ou la montre lorsqu'on appuie sur Tab. 
+					h3 Celle-ci affiche les scores des joueurs dans un tableau et se met à jour en se connectant à socket.
+					h2 Chat
+					h3 Crée un chat avec une div normal, un input et un bouton. On doit ensuite le connecter au socket.
+					h1 Serveur
+					h2 app
+					h3 Crée une application express, à partir de laquelle sera créé un serveur avec http et retourne ce dernier.
+					h3 Vous pouvez y configurer le routeur, etc...
+					h2 socket
+					h3 Utilise socket.io afin d'ecouter le serveur créé avec app.
+					h2 Player_server
+					h3 modifie le prototype de player afin de lui donner les fonctions suivantes :
+					h3 tryCollision : Test si le joueur donné rentre en collision avec les mur, retourne le joueur qui la tué ou false
+					h3 reset : Fait spawn le joueur donné dans la respawnZone et remet tout ses attributs à zero.
+					h3 isInSpawnZone : retourne vrai ou faux si il est dans la spawnZone.
+					h3 newWall : lui ajoute un nouveau mure
+					h3 isOutOfCanvas : retourne vrai ou faux si le joueur est en dehors du canvas.
+					h3 newScore : modifie le score du joueur.
+					h2 Server.js
+					h3 Le coeur logique du jeu. Il Pourrait être découpé en 2 morceaux : game_server et ioManage.
+					h2 connexion
+					h3 Lorsque le joueur se connecte, on attend que le client soit "ready", ensuite on lui envoi des paramètres (qui ont été réinitialisés avec player.protoype afin qu'il soit dans la spawnZone). Le client s'occupera alors de créé de son coté le joueur avec ces paramètres.
+					h3 Lorsque le client a créé le joueur, celui-ci envoi "playerCreated" au serveur qui crée alors de son coté le client avec les paramètres (toujours pas modifiés) et l'ajoute à la liste players avec son socket.id. Il incrément alors le nombres de joueurs.
+					h3 Le reste se passera une fois que le serveur ai reçu "playerCreated", car le tout se passera avec la liste.
+					h2 déconnexion
+					h3 Egalement après "playerCreated", le socket s'attend à le supprimer lorsqu'il se déconnectera avec socket.on("disconnect"). 
+					h2 nouvelle orientation
+					h3 Lorsqu'un client envoi une nouvelle orientation, le serveur en crée un nouveau pour le joueur concerné. Mais vérifie d'abord si il est en dehors de la spawnZone.
+					h2 chat
+					h3 Lorsqu'un client envoi un message, celui-ci est diffusé à travers tous les autres clients. On ne sauvegarde pas les messages.
+					h3 updateHighScore
+					h3 Une fonction apellée lorsque un joueur a gagné ou perdu (a tué ou est mort). et envoi au highscore des clients les players avec leurs scores et leur nom.

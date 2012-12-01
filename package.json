@@ -1,0 +1,19 @@
+{
+  "name": "hello_world",
+  "version": "1.0.0",
+  "author": "Pierre Lancien",
+  "main": "server",
+  "engines": {
+    "node": "0.8.11"
+  },
+  "scripts": {
+      "start": "server.js"
+  },
+  "dependencies": {
+      "express": "3.0.0rc4",
+      "connect": "2.4.4",
+      "jade": "0.27.6",
+      "socket.io": "0.9.10",
+      "requirejs": "2.1.2"
+  }
+}

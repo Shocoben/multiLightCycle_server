@@ -1,0 +1,98 @@
+html, body, div, span, applet, object, iframe,
+h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body 
+{
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+html, body 
+{
+	background-color: #000;
+	height: 99%;
+	font-family: Arial;
+}
+
+a
+{
+	font-size: 1.17em;
+	font-weight: bold;
+	color: #08A7C4;
+	text-align: center;
+}
+#wrapper
+{
+	width: 960px;
+	margin: auto;
+}
+
+#header
+{
+	text-align: center;
+}
+
+#presentation
+{
+	width: 50%;
+	margin: auto;
+	text-align: center;
+}
+
+h1, h2, h3
+{
+	color:#08a7c4
+}
+
+#technique
+{
+	width: 70%;
+	margin: auto;
+	text-align: center;
+}
+
+#technique h2, #technique h3
+{
+	text-align: left;
+}
+
+#technique h3
+{
+	color: #d6d3cc;
+}
